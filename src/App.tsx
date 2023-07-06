@@ -1,9 +1,8 @@
 import "./App.css";
-import { Letter } from "./components/Word/Letter/Letter";
-import { Word } from "./components/Word/Word";
+import { WordList } from "./components/WordList/WordList";
 
 function App() {
-  return <Word />;
+  return <WordList />;
 }
 
 export default App;

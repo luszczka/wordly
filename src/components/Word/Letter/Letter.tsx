@@ -1,6 +1,6 @@
 import styles from "./Letter.module.css";
 import { MAX_INPUT_LETTERS } from "./Letter.constants";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent } from "react";
 
 type LetterProps = {
   value: string;

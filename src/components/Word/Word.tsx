@@ -1,25 +1,37 @@
-import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
-import { InputLetter, Letter } from "./Letter/Letter";
-import { MAX_LETTERS_IN_WORD } from "./Word.constants";
+import { useCallback, useEffect, useState } from "react";
+import { Letter } from "./Letter/Letter";
 import styles from "./Word.module.css";
+import { lettersConfig } from "./Word.utils";
 
-export const Word = () => {
-  // const letters = ({ id, value }: LettersProps) => {
-  //   return { id, value };
-  // };
-
-  // const leters = Array.from({ length: MAX_LETTERS_IN_WORD }, (value, index) => {
-  //   return { id: index, value };
-  // });
-  // console.log(leters);
-
-  const lettersConfig = Array.from(
-    { length: MAX_LETTERS_IN_WORD },
-    (value: string, index) => {
-      return { id: index, value };
-    }
+export const EmptyWord = () => {
+  return (
+    <div className={styles.emptyLettersWrapper}>
+      {lettersConfig.map((letter) => {
+        return <Letter key={letter.id} value={letter.value} />;
+      })}
+    </div>
   );
+};
 
+type FulfilledWordProps = {
+  value: string;
+};
+
+export const FulfilledWord = ({ value }: FulfilledWordProps) => {
+  return (
+    <div className={styles.emptyLettersWrapper}>
+      {[...value].map((letter, index) => {
+        return <Letter key={letter + index} value={letter} />;
+      })}
+    </div>
+  );
+};
+
+type GuessingWordProps = {
+  passTypedWordToArray: (word: string) => void;
+};
+
+export const GuessingWord = ({ passTypedWordToArray }: GuessingWordProps) => {
   const [letters, setLetters] = useState(lettersConfig);
 
   const handleUserKeyPress = useCallback(
@@ -36,14 +48,20 @@ export const Word = () => {
       }
 
       const emptyLetter = letters.find((letter) => !letter.value);
-      if (emptyLetter) {
+      if (emptyLetter && /\p{L}/u.test(event.key) && event.key.length === 1) {
         const newLetters = [...letters];
         newLetters[emptyLetter.id].value = event.key;
         setLetters(newLetters);
+        if (!letters.find((letter) => !letter.value)) {
+          const word = letters.map((letter) => letter.value).join("");
+          passTypedWordToArray(word);
+          newLetters.map((letter) => (letter.value = ""));
+          setLetters(newLetters);
+        }
       }
       return;
     },
-    [letters]
+    [letters, passTypedWordToArray]
   );
 
   useEffect(() => {
@@ -55,9 +73,32 @@ export const Word = () => {
 
   return (
     <div className={styles.lettersWrapper}>
-      {letters.map((letter) => {
-        return <Letter key={letter.id} value={letter.value} />;
-      })}
+      {letters.map((letter) => (
+        <Letter key={letter.id} value={letter.value} />
+      ))}
     </div>
   );
+};
+
+type WordProps = {
+  isGuessing?: boolean;
+  passTypedWordToArray: (word: string) => void;
+  value?: string;
+};
+
+export const Word = ({
+  isGuessing,
+  passTypedWordToArray,
+  value,
+}: WordProps) => {
+  console.log(value);
+  if (isGuessing) {
+    return <GuessingWord passTypedWordToArray={passTypedWordToArray} />;
+  }
+
+  if (value) {
+    return <FulfilledWord value={value} />;
+  }
+
+  return <EmptyWord />;
 };

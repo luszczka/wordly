@@ -3,6 +3,8 @@
   gap: 0.5rem;
 }
 
-.input {
-  display: none;
+.emptyLettersWrapper {
+  display: flex;
+  gap: 0.5rem;
+  opacity: 0.5;
 }
