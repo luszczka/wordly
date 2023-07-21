@@ -1,0 +1,10 @@
+.lettersWrapper {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.emptyLettersWrapper {
+  display: flex;
+  gap: 0.5rem;
+  opacity: 0.5;
+}
