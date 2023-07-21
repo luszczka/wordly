@@ -10,12 +10,12 @@ export const WordList = () => {
   const passTypedWordToArray = (word: string) => {
     setWords([...words, word]);
   };
-  console.log(words);
   return (
     <div className={styles.wordsWrapper}>
       {[...Array(WORDS_COUNT)].map((word, index) => (
         <Word
           // key={word.id}
+          values={words}
           isGuessing={index === words.length}
           passTypedWordToArray={passTypedWordToArray}
         />

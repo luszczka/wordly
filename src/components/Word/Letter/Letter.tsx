@@ -3,7 +3,7 @@ import { MAX_INPUT_LETTERS } from "./Letter.constants";
 import { ChangeEvent } from "react";
 
 type LetterProps = {
-  value: string;
+  value?: string;
 };
 
 type InputLetterProps = {
@@ -12,7 +12,7 @@ type InputLetterProps = {
 };
 
 export const Letter = ({ value }: LetterProps) => {
-  return <div className={styles.letter}>{value}</div>;
+  return <div className={styles.letter}>{value ?? ""}</div>;
 };
 
 export const InputLetter = ({ onChange, value }: InputLetterProps) => {

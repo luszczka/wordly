@@ -2,13 +2,14 @@ import { useCallback, useEffect, useState } from "react";
 import { Letter } from "./Letter/Letter";
 import styles from "./Word.module.css";
 import { lettersConfig } from "./Word.utils";
+import { MAX_LETTERS_IN_WORD } from "./Word.constants";
 
 export const EmptyWord = () => {
   return (
     <div className={styles.emptyLettersWrapper}>
-      {lettersConfig.map((letter) => {
-        return <Letter key={letter.id} value={letter.value} />;
-      })}
+      {[...Array(MAX_LETTERS_IN_WORD)].map((word, index) => (
+        <Letter key={index} />
+      ))}
     </div>
   );
 };
@@ -83,21 +84,27 @@ export const GuessingWord = ({ passTypedWordToArray }: GuessingWordProps) => {
 type WordProps = {
   isGuessing?: boolean;
   passTypedWordToArray: (word: string) => void;
-  value?: string;
+  values?: string[];
 };
 
 export const Word = ({
   isGuessing,
   passTypedWordToArray,
-  value,
+  values,
 }: WordProps) => {
-  console.log(value);
+  console.log(values);
   if (isGuessing) {
     return <GuessingWord passTypedWordToArray={passTypedWordToArray} />;
   }
 
-  if (value) {
-    return <FulfilledWord value={value} />;
+  if (values && values.length > 0) {
+    return (
+      <div>
+        {values.map((value) => (
+          <FulfilledWord value={value} />
+        ))}
+      </div>
+    );
   }
 
   return <EmptyWord />;
